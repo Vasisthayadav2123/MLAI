@@ -3,6 +3,8 @@
 x = [1, 2, 3, 4, 5]
 y = [30, 40, 50, 60, 70]
 
+
+
 w = 0
 b = 0
 learning_rate = 0.01
@@ -10,11 +12,6 @@ learning_rate = 0.01
 
 def predict(x , w , b):
     return(w * x + b)
-
-#print(predict(3, 10, 20))
-#print(predict(5, 10, 20))
-#print(predict(1, 10, 20))
-
 
 def mse(y_true, y_pred):
     total = 0
@@ -38,30 +35,28 @@ def gradients(x , y_true , w , b):
     
     return dw , db
 
-dw, db = gradients(x, y, w, b)
+##for epoch in range(1000):
+##    dw, db = gradients(x, y, w, b)
+##
+##    if epoch % 100 == 0:
+##        ##print(mse(y , [predict(i, w, b) for i in x]))
+##
+##    w = w-learning_rate * dw
+##    b = b-learning_rate * db
 
-w = w - learning_rate * dw
-b = b - learning_rate * db
-
-
-for epoch in range(1000):
-    dw, db = gradients(x, y, w, b)
-
-    if epoch % 100 == 0:
-        ##print(mse(y , [predict(i, w, b) for i in x]))
-
-    w = w-learning_rate * dw
-    b = b-learning_rate * db
-
-##print(w, b)
 
 def train_model(x , y , w , b , learning_rate , epochs):
     for epoch in range(epochs):
         dw, db = gradients(x, y, w, b)
 
-        if epoch % 100 == 0:
-            print(mse(y , [predict(i, w, b) for i in x]))
-
         w = w-learning_rate * dw
         b = b-learning_rate * db
+        if epoch % 100 == 0:
+            print(mse(y , [predict(i, w, b) for i in x]))
+    return w, b
+
+w , b = train_model(x, y, w, b, learning_rate, 1000)
+
+print(predict(6, w, b))
+
 
