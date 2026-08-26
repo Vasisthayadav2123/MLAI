@@ -8,9 +8,9 @@ x = [
 ]
 
 y = [200, 250, 170, 300]
-w = [0.1, 10, 5]
+w = [0, 0, 0]
 
-b= 20
+b= 0
 
 def dot_product(x, y):
     return sum(x[i] * y[i] for i in range(len(x)))
@@ -37,7 +37,13 @@ def gradients(x , y , w , b):
     db = total_db/len(x)
     return dw , db
 
-dw, db = gradients(x, y, w, b)
+def standardize_data(values):
+    mean = sum(values) / len(values)
+    variance = (sum((x - mean) ** 2 for x in values) / len(values))
+    std = variance ** 0.5
+    standardized = [(x - mean) / std for x in values]
+    return standardized
+
 
 def train_model(x , y , w , b , learning_rate , epochs):
     for epoch in range(epochs):
@@ -48,4 +54,20 @@ def train_model(x , y , w , b , learning_rate , epochs):
         if epoch % 100 == 0:
             print(mse(y , [predict(i, w, b) for i in x]))
     return w , b
+
+
+w = [0, 0, 0]
+b = 0
+
+w, b = train_model(
+    x,
+    y,
+    w,
+    b,
+    learning_rate=0.0000001,
+    epochs=2000
+)
+
+print("w:", w)
+print("b:", b)
         
