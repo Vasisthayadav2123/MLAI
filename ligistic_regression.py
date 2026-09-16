@@ -13,3 +13,4 @@ p = predict(0, 1, 0)
 
 
 print(sigmoid(p))
+  
