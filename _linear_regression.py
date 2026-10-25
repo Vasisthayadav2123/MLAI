@@ -31,8 +31,8 @@ def gradients(x , y , w , b):
         for j in range(len(w)):
             total_dw[j] += 2 * error * x[i][j]
 
-        total_db += 2*error
-
+        total_db += error
+        
     dw = [total_dw[j]/len(x) for j in range(len(w))]
     db = total_db/len(x)
     return dw , db
@@ -55,19 +55,21 @@ def train_model(x , y , w , b , learning_rate , epochs):
             print(mse(y , [predict(i, w, b) for i in x]))
     return w , b
 
+if __name__ == "__main__":
 
-w = [0, 0, 0]
-b = 0
 
-w, b = train_model(
-    x,
-    y,
-    w,
-    b,
-    learning_rate=0.0000001,
-    epochs=2000
-)
+    w = [0, 0, 0]
+    b = 0
 
-print("w:", w)
-print("b:", b)
-        
+    w, b = train_model(
+        x,
+        y,
+        w,
+        b,
+        learning_rate=0.0000001,
+        epochs=2000
+    )
+
+    print("w:", w)
+    print("b:", b)
+            

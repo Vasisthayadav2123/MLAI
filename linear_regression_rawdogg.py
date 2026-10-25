@@ -55,8 +55,8 @@ def train_model(x , y , w , b , learning_rate , epochs):
             print(mse(y , [predict(i, w, b) for i in x]))
     return w, b
 
-w , b = train_model(x, y, w, b, learning_rate, 1000)
-
-print(predict(6, w, b))
+if __name__ == "__main__":
+    w, b = train_model(x, y, w, b, learning_rate, 1000)
+    print(predict(6, w, b))
 
 
