@@ -13,14 +13,23 @@ Act as my Machine Learning tutor and coding mentor. I'm learning ML from scratch
 - Goal: get an ML/AI job, so prioritize portfolio-worthy projects and industry tools (after I understand the internals).
 
 ## Roadmap
-1. **Neural network core:** chain rule → finish logistic regression (BCE loss + gradient) → single neuron → 2-layer NN with hand-derived backprop. Pure Python first (XOR), then NumPy (MNIST from scratch).
+1. **Neural network core:** chain rule → finish logistic regression (BCE loss + gradient) → single neuron → 2-layer NN with hand-derived backprop. Pure Python first (XOR) → **project: rockets learning to fly** (neuroevolution/genetic algorithm: each rocket has a small NN brain, best flyers are copied with mutations each generation; visual demo, portfolio piece) → then NumPy (MNIST from scratch).
 2. **Classical ML:** train/test split, overfitting, regularization, kNN, decision trees, Naive Bayes, k-means, PCA → then scikit-learn. Tabular data project.
 3. **Deep learning:** mini autograd engine, optimizers (momentum/Adam), CNNs, RNNs → attention/Transformers → then PyTorch. Image classifier + small character-level language model.
 
 ## Progress
-- Done (pure Python): vector/matrix ops (`core_python.py`), 1D linear regression (`linear_regression_rawdogg.py`), multi-feature linear regression (`_linear_regression.py`), animated gradient-descent visualization (`visualise_Linear_regression.py`), logistic regression stub with sigmoid only (`ligistic_regression.py`).
+- Done (pure Python): vector/matrix ops (`core_python.py`), 1D linear regression (`linear_regression_rawdogg.py`), multi-feature linear regression (`_linear_regression.py`), animated gradient-descent visualization (`visualise_Linear_regression.py`), logistic regression stub with sigmoid only (`logistic_regression.py`).
 - ✅ **Lesson 1 (2026-09-29 → 2026-10-25): the chain rule.** Exercises:
   1. ✅ `gradient_check.py`: numerical gradient check against my `gradients()` function (done 2026-10-24; passes ~1e-10, caught a deliberately removed factor of 2 in db). Still shaky on why central difference divides by 2h.
-  2. ✅ Derive σ'(z) = σ(z)(1 − σ(z)) on paper (derived 2026-10-25 with step-by-step hints; initially missed the minus sign from d/dz e^-z), verified numerically in `ligistic_regression.py` (~1e-11). Understands max σ' = 0.25 and gradient shrinks when confident.
+  2. ✅ Derive σ'(z) = σ(z)(1 − σ(z)) on paper (derived 2026-10-25 with step-by-step hints; initially missed the minus sign from d/dz e^-z), verified numerically in `logistic_regression.py` (~1e-11). Understands max σ' = 0.25 and gradient shrinks when confident.
   3. ✅ Explain why the ~1200-sized feature forces learning_rate = 1e-7 (the unused `standardize_data`). Initially thought large w caused large gradient; corrected to large feature value x. Understands divergence → nan and why standardizing lets one learning rate work. (Optional, not yet done: actually train on standardized features.)
-- **Current: Lesson 2: binary cross-entropy loss**, why not MSE for classification, derive dL/dz = p − y.
+- ✅ **Lesson 2 (2026-10-26): binary cross-entropy loss.**
+  - ✅ 2.1 Derived MSE+sigmoid gradient 2(p−y)p(1−p); showed confidently-wrong model (p=0.99, y=0) gets 15× smaller gradient than p=0.6; identified p(1−p) as the culprit.
+  - ✅ 2.2 Derived BCE dL/dz = p − y case by case (y=1, y=0) with hints. Got confused about where z is in link 2 (forgot p = σ(z)); needs brackets in fractions like −1/(1−p).
+  - ✅ 2.3 dL/dw_j = (p−y)x_j, dL/db = p−y. First gave only the dz/dw link (forgot to multiply by dL/dz); needed to be shown how to reuse the boxed p − y. Spotted the missing factor 2 vs linear regression.
+  - ✅ 2.4 Coded logistic regression in `logistic_regression.py` (hours-studied toy data): BCE with log(0) clipping, averaged gradients, training (lr 0.1, 10k epochs → loss 0.3129, w=1.28, b=−5.77, boundary 4.5h), accuracy 75%. Skipped the gradient check by choice. Bugs hit: forgot to average gradients; passed predictions into bce_loss (copied mse call signature). Understands non-separable data → loss can't reach 0, and that a single neuron is monotonic.
+  - ✅ 2.5 Found threshold 3.5 gives 87.5%; understands gradient descent minimizes loss not accuracy, and accuracy has zero gradient (surrogate loss idea).
+- **Current: Lesson 3 (started 2026-10-27): single neuron, decision boundaries, why one neuron can't solve XOR.**
+  - ✅ 3.1 By hand: AND (w=1,1 b=−1.5) correct; OR needed a hint (tried b=0, didn't see b in (−1,0) works); XOR impossibility proved via inequalities with heavy guidance (struggled with "positive + positive > 0" step and read `1·0` as decimal 1.0; use × for multiplication). Algebra with inequalities is a weak spot.
+  - ✅ 3.2 `neuron.py` (2-feature neuron, imports sigmoid/dot_product): AND & OR 100%, XOR stuck at w=[0,0], b=0, loss ln2=0.693, 50%. Explained it as symmetry (gradient exactly 0 at zero init). Told: best single line gets 75% on XOR, but ln2 is the convex loss minimum; zero-init symmetry is a trap in multi-neuron nets → random init. Pending small fix: main loop not indented under `if __name__`. Skipped: XOR loss prediction, per-point p printout, boundary plot bonus.
+- **Next: Lesson 4, 2-layer NN with hand-derived backprop** (solve XOR; random init; ReLU/tanh).
