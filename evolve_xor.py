@@ -20,7 +20,7 @@ def fitness(genome):
     return total_loss / len(X)
 
 
-def select_best(population, n):
+def select_best(population, n , fitness):
     best_genomes = sorted(population, key=fitness)
     return best_genomes[:n]
 
@@ -47,17 +47,15 @@ def mutate(genome):
 
 
 
-def evolve(generation):
-    population = create_population(50)
+def evolve(population, fitness, generations):
 
-    for gen in range(generation):
+    for gen in range(generations):
 
-        best_genomes = select_best(population, 10)
+        best_genomes = select_best(population, 10, fitness)
 
-
-        
         children = []
-        while(len(children) < 40):
+
+        while len(children) < 40:
             parent1, parent2 = random.sample(best_genomes, 2)
             child = crossover(parent1, parent2)
             child = mutate(child)
@@ -66,13 +64,16 @@ def evolve(generation):
         population = best_genomes + children
 
         if gen % 10 == 0:
-            best_loss = fitness(best_genomes[0])
-            print(f"Generation {gen}, Best Loss: {best_loss}")
-    return best_genomes[0]
+            best_score = fitness(best_genomes[0])
+            print(f"Generation {gen}, Best Score: {best_score}")
+
+    return population
         
     
 if __name__ == "__main__":
-    winner = evolve(300)
+    population = create_population(50)
+    population = evolve(population, fitness, 300)
+    winner = min(population, key=fitness)
     print("Final loss:", fitness(winner))
     for x_i, y_i in zip(X, y):
         a1, a2, p = forward_pass(x_i, winner)
