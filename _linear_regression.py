@@ -31,7 +31,7 @@ def gradients(x , y , w , b):
         for j in range(len(w)):
             total_dw[j] += 2 * error * x[i][j]
 
-        total_db += error
+        total_db += 2 * error
         
     dw = [total_dw[j]/len(x) for j in range(len(w))]
     db = total_db/len(x)

@@ -36,7 +36,7 @@ def brain_pilot(h , v , engine , genome):
     a1, a2, p = forward_pass([h_scaled , v_scaled] , genome)
     return p> 0.5
 
-def my_pilot(h , v , engine , genome):
+def my_pilot(h , v , engine):
     if h < 4 or v < -25 and not engine:
         engine = True
     if v > -1.5 and engine:
